@@ -7,7 +7,7 @@
   --text-dim: #9a9aa2;
   --accent: #ededf0;
   --radius: 10px;
-  --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --mono: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
 }
 
 * { box-sizing: border-box; }
@@ -16,8 +16,10 @@ html, body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 .app { min-height: 100vh; display: flex; flex-direction: column; }
@@ -251,12 +253,14 @@ html, body {
 @media (max-width: 760px) {
   .topbar { flex-wrap: nowrap; }
   .tabs {
-    position: fixed; top: 54px; left: 0; right: 0; bottom: 0;
+    position: fixed; top: 53px; left: 0; right: 0; bottom: 0;
     background: var(--bg); flex-direction: column; align-items: stretch;
     padding: 12px; transform: translateY(-110%); transition: transform 0.2s ease;
     z-index: 9; overflow-y: auto;
+    visibility: hidden; pointer-events: none;
   }
-  .tabs.open { transform: translateY(0); }
+  .tabs.open { transform: translateY(0); visibility: visible; pointer-events: auto; }
+  .panel-head h1 { font-weight: 600; letter-spacing: -0.01em; }
   .tab { padding: 14px 12px; font-size: 15px; justify-content: flex-start; }
   .tab svg { width: 17px; height: 17px; }
   .menu-btn { display: block; }
