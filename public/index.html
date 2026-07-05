@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sttar Obfuscator — Lua Obfuscation Dashboard</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Sidebar / top nav -->
+  <header class="topbar">
+    <div class="brand">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.2H22l-6.2 4.4 2.4 7.2L12 16.4l-6.2 4.4 2.4-7.2L2 9.2h7.6z"/></svg>
+      <span>Sttar<em>Obfuscator</em></span>
+    </div>
+    <nav class="tabs" id="tabs">
+      <button class="tab active" data-tab="obfuscator">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        Obfuscator
+      </button>
+      <button class="tab" data-tab="how">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        How to Use
+      </button>
+      <button class="tab" data-tab="why">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11z"/></svg>
+        Why Use It
+      </button>
+      <button class="tab" data-tab="docs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="12" y2="17"/></svg>
+        API Docs
+      </button>
+      <button class="tab" data-tab="privacy">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11z"/><path d="M9 12l2 2 4-4"/></svg>
+        Privacy
+      </button>
+    </nav>
+    <button class="menu-btn" id="menuBtn" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </header>
+
+  <main class="content">
+
+    <!-- OBFUSCATOR -->
+    <section class="panel active" id="obfuscator">
+      <div class="panel-head">
+        <h1>Obfuscate your Lua script</h1>
+        <p>Paste code or upload a <code>.lua</code> file. Powered by the Prometheus engine.</p>
+      </div>
+
+      <div class="input-mode">
+        <button class="mode-btn active" data-mode="paste">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
+          Paste code
+        </button>
+        <button class="mode-btn" data-mode="upload">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Upload file
+        </button>
+      </div>
+
+      <div class="editor-wrap" id="pasteMode">
+        <textarea id="codeInput" spellcheck="false" placeholder="-- paste your Lua script here
+local function greet(name)
+  print(&quot;Hello, &quot; .. name)
+end"></textarea>
+      </div>
+
+      <div class="editor-wrap hidden" id="uploadMode">
+        <label class="dropzone" id="dropzone" for="fileInput">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <span id="dropzoneText">Drop a .lua file here, or tap to browse</span>
+          <input type="file" id="fileInput" accept=".lua" hidden />
+        </label>
+      </div>
+
+      <div class="controls">
+        <div class="preset-group">
+          <label for="presetSelect">Preset</label>
+          <select id="presetSelect">
+            <option value="Minify">Minify — fastest, smallest, light protection</option>
+            <option value="Weak">Weak — basic renaming &amp; cleanup</option>
+            <option value="Medium" selected>Medium — balanced, recommended</option>
+            <option value="Strong">Strong — heavy protection, slower to run</option>
+          </select>
+        </div>
+        <button id="runBtn" class="primary-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Obfuscate
+        </button>
+      </div>
+
+      <div class="result hidden" id="resultBox">
+        <div class="result-head">
+          <span id="resultStatus"></span>
+          <div class="result-actions">
+            <button id="copyBtn" class="ghost-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copy
+            </button>
+            <button id="downloadBtn" class="ghost-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download
+            </button>
+          </div>
+        </div>
+        <pre id="outputCode"></pre>
+      </div>
+
+      <div class="history-wrap">
+        <div class="history-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>History</span>
+          <button id="clearHistory">Clear</button>
+        </div>
+        <ul id="historyList"></ul>
+      </div>
+    </section>
+
+    <!-- HOW TO USE -->
+    <section class="panel" id="how">
+      <div class="panel-head">
+        <h1>How to use Sttar Obfuscator</h1>
+        <p>Three steps, no setup on your side.</p>
+      </div>
+      <ol class="steps">
+        <li>
+          <span class="step-num">1</span>
+          <div>
+            <h3>Bring your script</h3>
+            <p>Paste your Lua code directly into the editor, or upload a <code>.lua</code> file — works the same on desktop or mobile.</p>
+          </div>
+        </li>
+        <li>
+          <span class="step-num">2</span>
+          <div>
+            <h3>Pick a preset</h3>
+            <p><strong>Minify</strong> for size only, <strong>Weak/Medium</strong> for everyday protection, <strong>Strong</strong> when you need heavy obfuscation and can accept a slower run.</p>
+          </div>
+        </li>
+        <li>
+          <span class="step-num">3</span>
+          <div>
+            <h3>Get your output</h3>
+            <p>Copy the obfuscated script or download it as a file. Your last few runs stay in History on this device.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- WHY USE -->
+    <section class="panel" id="why">
+      <div class="panel-head">
+        <h1>Why obfuscate your Lua code</h1>
+        <p>Protect the work you put into your scripts.</p>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11z"/></svg>
+          <h3>Protect your logic</h3>
+          <p>Stop others from copying your scripts and passing them off as their own.</p>
+        </div>
+        <div class="card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          <h3>Harder to reverse</h3>
+          <p>Variable renaming, control-flow changes, and string encoding make manual reading painful.</p>
+        </div>
+        <div class="card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <h3>Guard against tampering</h3>
+          <p>Makes it harder for others to quietly patch in unwanted behavior before redistributing your script.</p>
+        </div>
+        <div class="card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          <h3>Free to automate</h3>
+          <p>Use the API to fold obfuscation into your own build or release pipeline.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- API DOCS -->
+    <section class="panel" id="docs">
+      <div class="panel-head">
+        <h1>API reference</h1>
+        <p>Generate a key, then call the endpoint from your own tools.</p>
+      </div>
+
+      <div class="key-box">
+        <button id="genKeyBtn" class="primary-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.778-7.778zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+          Generate API key
+        </button>
+        <div class="key-display hidden" id="keyDisplay">
+          <code id="keyValue"></code>
+          <button id="copyKeyBtn" class="ghost-btn small">Copy</button>
+        </div>
+        <p class="key-note">Demo keys reset when the server restarts. Store your real key somewhere safe once you go live.</p>
+      </div>
+
+      <div class="endpoint">
+        <div class="endpoint-head"><span class="method post">POST</span><code>/api/v1/obfuscate</code></div>
+        <p>Obfuscates a Lua source string.</p>
+        <h4>Headers</h4>
+        <pre>x-api-key: YOUR_KEY
+Content-Type: application/json</pre>
+        <h4>Body</h4>
+        <pre>{
+  "code": "print('hello world')",
+  "preset": "Medium"
+}</pre>
+        <h4>Response</h4>
+        <pre>{
+  "ok": true,
+  "output": "-- obfuscated lua here"
+}</pre>
+      </div>
+
+      <div class="endpoint">
+        <div class="endpoint-head"><span class="method get">GET</span><code>/api/presets</code></div>
+        <p>Lists the available obfuscation presets.</p>
+      </div>
+
+      <div class="endpoint">
+        <h4>Example (curl)</h4>
+        <pre>curl -X POST https://your-app.onrender.com/api/v1/obfuscate \
+  -H "x-api-key: YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"code":"print(1)","preset":"Strong"}'</pre>
+      </div>
+
+      <div class="endpoint">
+        <h4>Rate limits</h4>
+        <p>12 requests per minute per IP address on obfuscation endpoints. Contact the maintainer for higher limits.</p>
+      </div>
+    </section>
+
+    <!-- PRIVACY -->
+    <section class="panel" id="privacy">
+      <div class="panel-head">
+        <h1>Privacy policy</h1>
+        <p>Short version: your code passes through, it doesn't stay.</p>
+      </div>
+      <div class="policy">
+        <h3>What we receive</h3>
+        <p>The Lua code you paste or upload, and the preset you choose, are sent to the server only to run the obfuscation.</p>
+        <h3>What we store</h3>
+        <p>Nothing server-side. Temporary files are deleted immediately after each job finishes. Your run history is saved only in your own browser, not on our servers.</p>
+        <h3>API keys</h3>
+        <p>Keys are held in memory for the current server session and are cleared on restart. Don't submit code you can't afford to have pass through a third-party server.</p>
+        <h3>Logging</h3>
+        <p>Standard request logs (timestamp, IP, status code) may be kept briefly for abuse prevention, never the code content itself.</p>
+        <h3>Contact</h3>
+        <p>Questions about this policy can go to the maintainer directly.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
